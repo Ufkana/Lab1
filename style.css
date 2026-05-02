@@ -60,7 +60,7 @@ body::before {
     font-size: 2.2rem;
     font-weight: 800;
     letter-spacing: -0.02em;
-    background: linear-gradient(135deg, var(--primary), #8b5cf6);
+    background: linear-gradient(135deg, var(--primary), #742121);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -229,7 +229,7 @@ body::before {
     position: absolute;
     top: -8px;
     right: -8px;
-    background: #fff;
+    background: #7a6969;
     color: var(--text);
     border-radius: 50%;
     width: 24px;
@@ -544,6 +544,63 @@ body::before {
     font-family: var(--font);
     transition: var(--transition);
     background: #fafbfc;
+}
+.flashcard-scene {
+    perspective: 900px;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto 20px;
+    height: 260px;
+    cursor: pointer;
+}
+
+.flashcard {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.flashcard.flipped {
+    transform: rotateY(180deg);
+}
+
+.flashcard-face {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    transform-style: preserve-3d; /* 🔥 важно */
+
+    box-shadow: var(--shadow-lg);
+    padding: 30px;
+    text-align: center;
+    border: 2px solid transparent;
+}
+
+
+/* ❗ УБРАН z-index */
+.flashcard-front {
+    background: linear-gradient(145deg, #ffffff, #f7f8fc);
+    border-color: var(--border);
+    transform: rotateY(0deg) translateZ(1px);
+}
+
+/* задняя сторона */
+.flashcard-back {
+    background: linear-gradient(145deg, #f0f4ff, #e8ecf8);
+    border-color: #c8d0e8;
+    
+    transform: rotateY(180deg) translateZ(1px);
 }
 .modal input:focus,
 .modal select:focus {
