@@ -13,41 +13,83 @@
     const STORAGE_KEY_WORDS = 'lingualearn_words';
     const STORAGE_KEY_STREAK = 'lingualearn_streak';
     const STORAGE_KEY_LAST_STUDY = 'lingualearn_lastStudy';
+    // ─────────────────────────────────────
 
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+let alphabetIndex = 0;
+
+function renderAlphabet() {
+    const letter = alphabet[alphabetIndex];
+
+    const word = words.find(w => w.english[0].toUpperCase() === letter);
+
+    document.getElementById('alphabetDisplay').textContent = letter;
+    document.getElementById('alphabetWord').textContent = word ? word.english : '—';
+}
+
+function nextLetter() {
+    alphabetIndex++;
+    if (alphabetIndex >= alphabet.length) alphabetIndex = 0;
+    renderAlphabet();
+}
     // ─────────────────────────────────────
     // ДАННЫЕ ПО УМОЛЧАНИЮ
     // ─────────────────────────────────────
     function getDefaultWords() {
-        const today = getTodayISO();
-        const pastDate = '2024-01-01';
-        return [
-            { id: 1, english: 'apple', russian: 'яблоко', category: 'Еда', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 2, english: 'bread', russian: 'хлеб', category: 'Еда', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 3, english: 'water', russian: 'вода', category: 'Еда', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 4, english: 'milk', russian: 'молоко', category: 'Еда', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 5, english: 'cheese', russian: 'сыр', category: 'Еда', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 6, english: 'house', russian: 'дом', category: 'Основные', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 7, english: 'book', russian: 'книга', category: 'Основные', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 8, english: 'friend', russian: 'друг', category: 'Основные', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 9, english: 'city', russian: 'город', category: 'Основные', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 10, english: 'morning', russian: 'утро', category: 'Основные', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 11, english: 'airport', russian: 'аэропорт', category: 'Путешествия', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 12, english: 'ticket', russian: 'билет', category: 'Путешествия', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 13, english: 'hotel', russian: 'отель', category: 'Путешествия', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 14, english: 'map', russian: 'карта', category: 'Путешествия', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 15, english: 'sun', russian: 'солнце', category: 'Природа', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 16, english: 'tree', russian: 'дерево', category: 'Природа', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 17, english: 'flower', russian: 'цветок', category: 'Природа', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 18, english: 'river', russian: 'река', category: 'Природа', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 19, english: 'computer', russian: 'компьютер', category: 'Технологии', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 20, english: 'phone', russian: 'телефон', category: 'Технологии', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 21, english: 'screen', russian: 'экран', category: 'Технологии', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 22, english: 'keyboard', russian: 'клавиатура', category: 'Технологии', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 23, english: 'office', russian: 'офис', category: 'Работа', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 24, english: 'meeting', russian: 'встреча', category: 'Работа', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-            { id: 25, english: 'project', russian: 'проект', category: 'Работа', box: 1, lastReviewed: pastDate, nextReview: pastDate, correctCount: 0, wrongCount: 0 },
-        ];
-    }
+    const pastDate = '2024-01-01';
+
+    const baseWords = [
+        { english: 'apple', russian: 'яблоко', category: 'Еда' },
+        { english: 'bread', russian: 'хлеб', category: 'Еда' },
+        { english: 'water', russian: 'вода', category: 'Еда' },
+        { english: 'milk', russian: 'молоко', category: 'Еда' },
+        { english: 'cheese', russian: 'сыр', category: 'Еда' },
+
+        { english: 'house', russian: 'дом', category: 'Основные' },
+        { english: 'book', russian: 'книга', category: 'Основные' },
+        { english: 'friend', russian: 'друг', category: 'Основные' },
+        { english: 'city', russian: 'город', category: 'Основные' },
+        { english: 'morning', russian: 'утро', category: 'Основные' },
+
+        { english: 'airport', russian: 'аэропорт', category: 'Путешествия' },
+        { english: 'ticket', russian: 'билет', category: 'Путешествия' },
+        { english: 'hotel', russian: 'отель', category: 'Путешествия' },
+        { english: 'map', russian: 'карта', category: 'Путешествия' },
+
+        { english: 'sun', russian: 'солнце', category: 'Природа' },
+        { english: 'tree', russian: 'дерево', category: 'Природа' },
+        { english: 'flower', russian: 'цветок', category: 'Природа' },
+        { english: 'river', russian: 'река', category: 'Природа' },
+
+        { english: 'computer', russian: 'компьютер', category: 'Технологии' },
+        { english: 'phone', russian: 'телефон', category: 'Технологии' },
+        { english: 'screen', russian: 'экран', category: 'Технологии' },
+        { english: 'keyboard', russian: 'клавиатура', category: 'Технологии' },
+
+        { english: 'office', russian: 'офис', category: 'Работа' },
+        { english: 'meeting', russian: 'встреча', category: 'Работа' },
+        { english: 'project', russian: 'проект', category: 'Работа' },
+    ];
+
+    const WORDS_PER_LEVEL = 5;
+
+    return baseWords.map((w, i) => ({
+        id: i + 1,
+        english: w.english,
+        russian: w.russian,
+        category: w.category,
+
+        // 🔥 автоматический уровень
+        level: Math.floor(i / WORDS_PER_LEVEL) + 1,
+
+        // остальное
+        box: 1,
+        lastReviewed: pastDate,
+        nextReview: pastDate,
+        correctCount: 0,
+        wrongCount: 0
+    }));
+}
 
     // ─────────────────────────────────────
     // УТИЛИТЫ
@@ -631,6 +673,6 @@
         document.getElementById('quizResultCard').style.display = 'none';
         document.getElementById('quizStartRow').style.display = 'flex';
     }
-
+if (panelName === 'alphabet') renderAlphabet();
     init();
 })();
